@@ -1,0 +1,39 @@
+https://tryhackme.com/room/mondaymonitor
+
+- Start the machine, let it load, and then login to Wazuh with the provided credentials.
+- Take note of the timeframe provided (Apr 29, 2024, between 12:00:00 and 20:00:00).
+- Make sure to use the saved query (Monday_Monitor).
+
+Initial access was established using a downloaded file. What is the file name saved on the host?
+1. Head to Security Events, set the date range, and choose the saved query.
+2. Look for activity on *localhost* on the Events tab.
+3. The first event has a PowerShell command that output a file from a suspicious input file:
+**********_*********_********.xlsm
+
+What is the full command run to create a scheduled task?
+1. Search for *schedule*, but this brings back a lot, so try *scheduler*.
+2. Look through the entries, focus on commands, and eliminate a few more by adding *cmd.exe* to the search.
+3. Identify the full command used that begins with *cmd.exe*.
+
+What time is the scheduled task meant to run?
+1. Reading through the command from the previous question, identify the time /st
+**:**
+
+What was encoded?
+1. Again, in the command there is some encoded text.
+2. Use cyberchef.org and throw *From Base64* into the recipe.
+ping ***.****************.***
+
+What password was set for the new user account?
+1. *net.exe* is used to manage things, including user accounts, so search for *net* or *net.exe*
+2. Look through the results to identify an account with a password:
+...net.exe\" user guest *_**_**********
+
+What is the name of the .exe that was used to dump credentials?
+1. Commonly use Mimikatz for cred dumping, so search for it.
+2. Look through to find the actual .exe that was put into cmd
+********.exe
+
+Data was exfiltrated from the host. What was the flag that was part of the data?
+1. Options to find this include looking for *POST* requests (more realistic), or knowing that this is a flag *THM{* is pretty common for flags on THM.
+THM{*******_**_**_******}
