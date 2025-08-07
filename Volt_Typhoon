@@ -1,0 +1,79 @@
+https://tryhackme.com/room/volttyphoon
+
+- Username: volthunter
+- Password: voltyp1010
+- Splunk URL: http://MACHINE_IP:8000
+- MITRE ATT&CK on VT https://attack.mitre.org/groups/G1017/ and pull up the Navigator
+- The room is covering two weeks, but does not provide the date range, so set your parameter to *All Time*
+- To find out what sources we have - index=* | dedup source | table source
+
+Task 1
+1. Click
+
+Task 2
+1. Looking at *ADSelfService* as a service_name, as well as *password change* and *Dean*:
+- service_name=ADSelfServicePlus "password change" "Dean"
+- Find the completed change date and time:
+YYYY-MM-DDTHH:MM:22
+
+2. Set the date range to go no further back than the time from Q1, and look for admin accounts.
+- Time range from Dean's password reset to the top of the hour should work
+- service_name=ADSelfServicePlus "admin" "account":
+******-admin
+
+Task 3
+1. Different log to look through, note the source from Task 2 though, and adjust for WMIC, remembering to set your date range>
+source="/home/volthunter/logfiles/wmic*" "server01" "server02"
+- Look at *command* under *Event*
+wmic ...
+
+2. Now looking for the attacker running *ntdsutil*
+source="/home/volthunter/logfiles/wmic*" "ntdsutil"
+- This provides the name of the copy to look for, temp.dit, which we can look for, and also get the name of the archive.
+- Look for the *-p* flag in the results:
+d*****m*****
+
+Task 4
+1. Looking for a command run to decode a persistence tool, so use use:
+source="/home/volthunter/logfiles/pshell.log"
+- Using MITRE ATT&CK Navigator shows Volt likes to use two different webshells i*******.aspx or A**********.aspx, so add ".as>
+- Remember it was Base64 encoded:
+C:\*******\****
+
+Task 5
+1. Stay in the pshell.log
+- Volt removed things to hide, add in "remove"
+Remove-************
+
+2. Using the name of the archive from before, and looking in the wmic log:
+c***.***
+
+3. Looking for registry paths, under Windows there start with HKEY-, or could look for virtual
+source="/home/volthunter/logfiles/pshell.log" "HKEY" "virtual"
+HKEY-****...
+
+Task 6
+1. Stay with pshell.log, and look for "reg query"
+o*******, p****, r******
+
+2. A few ways to tackle this, bruteforce by looking at all the pshell.log entries, or look for mimikatz.
+- Base64 encode "mimikatz" and use that as a search term, remember wildcards.
+I*******...
+
+Task 7
+1. Look for the tool Volt used wevutil and EventID
+4*** 4*** 4***
+
+2. Already have the name of the webshell from before iisstart.aspx, that's a term.
+A**********.jspx
+
+Task 8
+1. In the pshell.log use keyterms like copy and finance, wildcard them if needed:
+****.csv ****.csv ****.csv
+
+Task 9
+1. Look in all of the wmic* log for netsh:
+1*.*.**.* ***3
+
+2. Volt used wevtutil for working with logs, check for what flags to use to clear them.
+A********** S******* S**** S*****
