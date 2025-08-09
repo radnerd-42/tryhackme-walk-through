@@ -1,0 +1,34 @@
+https://tryhackme.com/room/tsharkchallengesone
+
+Task 1
+1. Start the machine, and Click
+
+Task 2
+
+1. Use tshark to read a pcap with -r, and then apply filters with -T
+   tshark -r teamwork.pcap -T...
+- Domains can be found with http.host so:
+   tshark -r teamwork.pcap -T -e http.host
+- Get them to be unique
+   tshark -r teamwork.pcap -T -e http.host | sort | uniq
+- Check the results against VirusTotal.com, and identify the malicious url
+- Defang the result as the answer in CyberChef, or manually:
+hxxp://...
+
+2. Still on VirusTotal.com, go to Details and find the date and time it was submitted. This took a bit of reloading the page to finally show.
+20**-**-** HH:MM:SS UTC
+
+3. Looking at the domain there is the name of a popular transaction site.
+******
+
+4. Look at VirusTotal.com on the Relations tab, or use DNS filters in tshark
+   tshark -r teamwork.pcap -T fields -e dns.qry.name -e dns.a | sort | uniq
+-remember to dfang with CyberChef or manually
+***[.]***[.]***[,]***
+
+5. Run tshark with the verbose -V flag, then use grep or similar to search for an email address pattern, remember to use -Eo to use regex and exact match.
+   [A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}
+- Remember to defang with CyberChef or manually.
+   ************[at]*****[.]***
+
+6. Click
