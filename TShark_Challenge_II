@@ -1,0 +1,61 @@
+https://tryhackme.com/room/tsharkchallengestwo
+
+Task 1
+
+1. Start VM
+
+2. Click
+
+Task 2
+
+What is the name of the malicious/suspicious domain?
+1. Run tshark and identify the DNS requests.
+ - tshark -r ~/Desktop/exercise-files/directory-curiosity.pcap -T fields -e dns.qry.name | sort -u
+2. Check them using VirusTotal.com to identify a malicious domain
+ - ***-*******.com
+
+What is the total number of HTTP requests sent to the malicious domain?
+1. Start by finding the ip address for the domain.
+ - tshark -r ~/Desktop/exercise-files/directory-curiosity.pcap -Y 'dns.qry.name == <malicious_domain>'
+ - ***.***.**.174
+2. Now look for Http requests.
+ - tshark -r ~/Desktop/exercise-files/directory-curiosity.pcap -Y 'ip.dst == ***.***.**.174 and http.request' | wc -l
+ - **
+
+What is the IP address associated with the malicious domain?
+1. Already identified above, but needs to be defanged (CyberChef, or manual).
+ - ***[.]***[.]**[.]174
+
+What is the server info of the suspicious domain?
+1. tshark -r ~/Desktop/exercise-files/directory-curiosity.pcap -T fields -e http.server | sort -u
+ - a single result
+
+Follow the "first TCP stream" in "ASCII".
+Investigate the output carefully.
+What is the number of listed files?
+1. tshark -r directory-curiosity.pcap -z follow,tcp,ascii,0 -q # '-z' gets the flow using 'follow', needs to be 'tcp' and 'ascii', and 0 is the first stream identified
+ - Looking in the html block there are * files
+
+What is the filename of the first file?
+1. Looking at that block again, take the first file name and defang it (manually is faster here).
+ - ***[.]***
+
+Export all HTTP traffic objects.
+What is the name of the downloaded executable file?
+Enter your answer in a defanged format.
+1. Check the manual page for how to export objects (--export-objects proto,dir)
+ - tshark -r ~/Desktop/exercise-files/directory-curiosity.pcap --export-objects http,.
+ - ******[.]exe
+
+What is the SHA256 value of the malicious file?
+1. sha256sum ******[.]exe
+ - <SHA256 value>
+
+Search the SHA256 value of the file on VirtusTotal.
+What is the "PEiD packer" value?
+1. On VirusTotal check under the DETAILS tab for the PEiD packer.
+ - .*** **********
+
+What does the "Lastline Sandbox" flag this as?
+1. On the BEHAVIOR tab look for the type of malware that Lastline says this is.
+ - ******* ******
