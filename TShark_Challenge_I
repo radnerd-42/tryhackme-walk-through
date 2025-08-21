@@ -8,9 +8,9 @@ Task 2
 1. Use tshark to read a pcap with -r, and then apply filters with -T
    tshark -r teamwork.pcap -T...
 - Domains can be found with http.host so:
-   tshark -r teamwork.pcap -T -e http.host
+   tshark -r teamwork.pcap -T fields -e http.host
 - Get them to be unique
-   tshark -r teamwork.pcap -T -e http.host | sort | uniq
+   tshark -r teamwork.pcap -T fields -e http.host | sort | uniq
 - Check the results against VirusTotal.com, and identify the malicious url
 - Defang the result as the answer in CyberChef, or manually:
 hxxp://...
