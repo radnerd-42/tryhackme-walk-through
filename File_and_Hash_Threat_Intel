@@ -1,0 +1,93 @@
+https://tryhackme.com/room/fileandhashthreatintel
+
+Task 1
+
+1. Start VM
+
+2. Click
+
+Task 2
+
+1. One file displays one of the indicators mentioned. Can you identify the file and the indicator? (Answer: file, property)
+ - Navigate to 'CTI files' directory, and check the 'Properties' of each file.
+ - *******.***
+ - Doubled up on something?
+
+Task 3
+
+1. What is the SHA256 hash of the file bl0gger?
+ - Using PowerShell r CMD:
+ - certutil -hashfile bl0gger.exe sha256
+
+2. On VirusTotal, what is the threat label used to identify the malicious file?
+ - Take that sha256 to VirusTotal.com
+ - Look toward the top
+
+3. When was the file first submitted for analysis? (Answer format: YYYY-MM-DD HH:MM:SS)
+ - Check the 'Details' tab
+
+4. According to MalwareBazaar, which vendor classified the Morse-Code-Analyzer file as non-malicious?
+ - certutil -hashfile Morse-Code-Analyzer.exe sha256
+ - Go to malwarebazaar.com
+ - In the search bar, use the syntax 'sha256:######..."
+
+5. On VirusTotal, what MITRE technique has been flagged for persistence and privilege escalation for the Morse-Code-Analyzer file?
+ - Back on VirusTotal.com, use the sha256 for the 'Morse-Code-Analyzer'
+ - Go to 'Details', and look for 'persistence'
+
+Task 4
+
+1. What tags are used to identify the bl0gger.exe malicious file on Hybrid Analysis? (Answer: Tag1, Tag2, Tag3)
+ - Go to HybridAnalysis.com, and search the sha256 from the previous task for bl0gger
+ - At the top on the right, get the three tags
+
+2. What was the stealth command line executed from the file?
+ - Look under 'Malicious Indicators', then 'Anti-Detection/Stealthiness'
+ - Copy/Paste did not work, hand jam it
+
+3. Which other process was spawned according to the process tree?
+ - Look under 'Hybrid Analysis' for the other process
+
+4. The payroll.pdf application seems to be masquerading as which known Windows file?
+ - Get the sha256 for the file
+ - certutil -hashfile payroll.pdf.exe sha256
+ - search for that in HybridAnalysis.com
+ - Look for 'Original File Name:'
+ - This is not the answer, but is meant to look like the answer...
+ - *******.exe
+
+5. What associated URL is linked to the file?
+ - Should have seen this when you were looking at your search results for the sha256
+ - Look for 'Related Sandbox Artifacts'
+ - make sure to defang http
+
+6. How many extracted strings were identified from the sandbox analysis of the file?
+ - Go to the 'Extracted Strings' section and look at 'All Strings'
+
+Task 5
+1. What is the SHA256 hash of the file?
+ - Back in the 'CTI Files' directory
+ - certutil -hashfile .\Challenge.bin.sample sha256
+
+2. What family labels are assigned to the file on VirusTotal?
+ - Take the sha256 to VirusTotal.com
+ - Look for 'Family Labels' toward the top
+ - Ignore 'misc'
+
+3. How many security vendors have flagged the file as malicious?
+ - First thing you see ##/72
+
+4. Name the text file dropped during the execution of the malicious file.
+ - Take the sha256 over to HybridAnalysis.com
+ - Search for a '.txt' file
+
+5. What PowerShell script is observed to be executed?
+ - Still on HybridAnalysis.com, search for 'powershell' to identify what's happening
+ - Looks like it attempts to remove something
+
+6. What is the MITRE ATT&CK ID associated with this execution? 
+ - In that same section, find the ATT&CK ID
+7. 
+
+Task 6
+1. Click and done
