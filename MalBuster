@@ -1,0 +1,59 @@
+https://tryhackme.com/room/malbuster
+
+Based on the ARCHITECTURE of the binary, is malbuster_1 a 32-bit or a 64-bit application? (32-bit/64-bit)
+- For this one, navigate to the Samples folder in the terminal, and check 'file malbuster_1'
+
+What is the MD5 hash of malbuster_1?
+- While we're still in the Samples folder in the terminal, use 'md5sum malbuster_1' to get the hash.
+
+Using the hash, what is the popular threat label of malbuster_1 according to VirusTotal?
+- Copy the md5 hash value and put it into Virustotal.com. Look just below the tabs for "Popular threat label."
+
+Based on VirusTotal detection, what is the malware signature of malbuster_2 according to Avira?
+- Do the same thing for malbuster_2 (run 'md5sum malbuster_2' take the hash over to Virustotal.com). Find Avira on the DETECTION tab, and look at the malware signature in the last column.
+
+malbuster_2 imports the function _CorExeMain. From which DLL file does it import this function?
+- Take that hash value, and go over to hybrid-analysis.com
+- Choose Report Search, and pull up the top result.
+- In the report, scroll down to File Imports. There you'll find the function _CorExeMain, and the .dll we're looking for.
+
+Based on the VS_VERSION_INFO header, what is the original name of malbuster_2?
+- Back in the VM, run 'pecheck malbuster_2'
+- Look through the results under Version Information.
+- Optionally, you can include '| grep OriginalFilename' to go straight to it.
+
+Using the hash of malbuster_3, what is its malware signature based on abuse.ch?
+- Get the hash for malbuster_3 ('md5sum malbuster_3'), and take it to bazaar.abuse.ch
+- In the search bar make sure to use the right syntax - md5:<hash>
+- In the result, find the signature.
+
+Using the hash of malbuster_4, what is its malware signature based on abuse.ch?
+- Same thing, get the hash for malbuster_4 ('md5sum malbuster_4'), go to bazaar.abuse.ch, and search for md5:<hash>
+
+What is the message found in the DOS_STUB of malbuster_4?
+- In the VM, run 'pe-tree malbuster_4', this will load the pe-tree GUI.
+- Once loaded, you can navigate to the DOS_STUB, and read through it. This is a program that runs at the start of the PE execution...
+
+malbuster_4 imports the function ShellExecuteA. From which DLL file does it import this function?
+- Still in the pe-tree GUI, scroll through until you find the IMAGE_IMPORT_DESCRIPTOR section.
+- Expand it out, and look for a .dll that has to do with shell. Expand that out to confirm that ShellExecuteA is part of it.
+
+Using capa, how many anti-VM instructions were identified in malbuster_1?
+- In the VM, run 'capa malbuster_1'
+- In the results under CAPABILITY you'll find the reference anti-VM strings list, but will have to count them.
+
+Using capa, which binary can log keystrokes?
+- In the VM you'll need to run capa on all of the binaries in Samples.
+- Look through the results for keystroke (add '| grep keystroke' to it when you run capa)
+- Maybe go backwards through them...
+
+Using capa, what is the MITRE ID of the DISCOVERY technique used by malbuster_4?
+- In the VM run 'capa malbuster_4' and read through it to find the DISCOVERY section. You're looking for the MITRE technique ID starting with a T.
+- You could again add '| grep DISCOVERY'
+
+Which binary contains the string GodMode?
+- In the VM you can use 'strings' to look at the binaries ('strings malbuster_# | grep GodMode')
+- You could also just 'grep GodMode malbuster_#' and see which one matches.
+
+Which binary contains the string Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)?
+- Same thing as the last one, but search for 'Mozilla'. Both strings and grep will work.
